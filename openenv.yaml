@@ -1,0 +1,14 @@
+﻿title: Email Triage Assistant - Real World Inbox Management
+emoji: ✉️
+colorFrom: indigo
+colorTo: blue
+sdk: docker
+pinned: false
+app_port: 8000
+tags:
+  - openenv
+  - email-triage
+  - customer-support
+  - agentic-ai
+  - real-world
+description: A realistic email triage environment for training AI agents on classification, prioritization, and response generation. 3 progressive tasks with deterministic graders.
