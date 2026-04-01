@@ -4,7 +4,11 @@ client.py
 models.py
 pyproject.toml
 ./__init__.py
+./app.py
+./baseline.py
 ./client.py
+./echo_environment.py
+./inference.py
 ./models.py
 openenv_echo_env.egg-info/PKG-INFO
 openenv_echo_env.egg-info/SOURCES.txt

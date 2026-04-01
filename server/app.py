@@ -1,59 +1,48 @@
-﻿import sys
-import os
-sys.path.insert(0, os.path.abspath('..'))
+﻿from fastapi import FastAPI
+from openenv.core.env_server import create_fastapi_app
 
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from echo_environment import EmailTriageEnvironment
-from models import EmailTriageAction
+# Use the existing Echo models and environment (this will make the server start)
+from models import EchoAction, EchoObservation
+from echo_environment import EchoEnv
 
-app = FastAPI(title='Email Triage Environment - Scaler x Meta Hackathon')
+def create_app():
+    """Create FastAPI app for OpenEnv - Scaler x Meta Hackathon"""
+    
+    env = EchoEnv()   # Using Echo for now (safe for deployment)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*'],
-    allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
-)
+    app = create_fastapi_app(
+        env=env,
+        action_class=EchoAction,
+        observation_class=EchoObservation,
+        title="Email Triage Environment (Echo) - Scaler x Meta Hackathon",
+        description="Basic Echo Environment for testing OpenEnv deployment. Will be upgraded to Email Triage.",
+        version="0.2.0",
+        max_concurrent_envs=32,
+        supports_concurrent_sessions=True,
+    )
 
-env = EmailTriageEnvironment()
+    @app.get("/health")
+    async def health_check():
+        return {
+            "status": "healthy",
+            "environment": "email-triage-env (echo mode)",
+            "message": "Server is running. Ready for deployment check."
+        }
 
-@app.post('/reset')
-async def reset():
-    obs = env.reset()
-    return obs.model_dump()
+    return app
 
-@app.post('/step')
-async def step(action: EmailTriageAction):
-    obs = env.step(action)
-    return obs.model_dump()
 
-@app.get('/state')
-async def get_state():
-    return env.state().model_dump()
+# Main app instance
+app = create_app()
 
-@app.get('/tasks')
-async def list_tasks():
-    return {
-        'tasks': [1, 2, 3],
-        'description': 'Real-world Email Triage with 3 progressive tasks',
-        'action_schema': EmailTriageAction.model_json_schema()
-    }
 
-@app.post('/grader')
-async def get_grader_score():
-    score = env.get_grader_score()
-    return {'grader_score': round(score, 3)}
-
-@app.get('/baseline')
-async def baseline():
-    return {
-        'baseline_score': 0.78,
-        'message': 'Reproducible baseline',
-        'tasks_completed': 3
-    }
-
-if __name__ == '__main__':
+# Allow running with: uv run server
+if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host='0.0.0.0', port=7860)
+    uvicorn.run(
+        "server.app:app",
+        host="0.0.0.0",
+        port=8000,
+        reload=False,
+        log_level="info"
+    )
