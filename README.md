@@ -143,18 +143,3 @@ This example shows:
 - Resetting and stepping through the environment
 - Automatic cleanup with `close()`
 
-## Project Structure
-
-```
-echo_env/
-├── __init__.py            # Module exports
-├── README.md              # This file
-├── client.py              # EchoEnv client implementation
-├── models.py              # Action and Observation models
-└── server/
-    ├── __init__.py        # Server module exports
-    ├── echo_environment.py  # Core environment logic
-    ├── app.py             # FastAPI application
-    ├── test_echo_env.py   # Direct environment tests
-    └── Dockerfile         # Container image definition
-```
