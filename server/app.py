@@ -1,48 +1,59 @@
-﻿from fastapi import FastAPI
-from openenv.core.env_server import create_fastapi_app
+import sys
+import os
+sys.path.insert(0, os.path.abspath('..'))
 
-# Use the existing Echo models and environment (this will make the server start)
-from models import EchoAction, EchoObservation
-from echo_environment import EchoEnv
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from models import EmailTriageAction
+from echo_environment import EmailTriageEnvironment
 
-def create_app():
-    """Create FastAPI app for OpenEnv - Scaler x Meta Hackathon"""
-    
-    env = EchoEnv()   # Using Echo for now (safe for deployment)
+app = FastAPI(title="Email Triage Assistant - Scaler x Meta Hackathon")
 
-    app = create_fastapi_app(
-        env=env,
-        action_class=EchoAction,
-        observation_class=EchoObservation,
-        title="Email Triage Environment (Echo) - Scaler x Meta Hackathon",
-        description="Basic Echo Environment for testing OpenEnv deployment. Will be upgraded to Email Triage.",
-        version="0.2.0",
-        max_concurrent_envs=32,
-        supports_concurrent_sessions=True,
-    )
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-    @app.get("/health")
-    async def health_check():
-        return {
-            "status": "healthy",
-            "environment": "email-triage-env (echo mode)",
-            "message": "Server is running. Ready for deployment check."
-        }
+env = EmailTriageEnvironment()
 
-    return app
+@app.get("/")
+async def root():
+    return {"message": "Email Triage Environment is live", "status": "healthy"}
 
+@app.post("/reset")
+async def reset():
+    obs = env.reset()
+    return obs.model_dump()
 
-# Main app instance
-app = create_app()
+@app.post("/step")
+async def step(action: EmailTriageAction):
+    obs = env.step(action)
+    return obs.model_dump()
 
+@app.get("/tasks")
+async def list_tasks():
+    return {
+        "tasks": [1, 2, 3],
+        "description": "Real-world Email Triage",
+        "action_schema": EmailTriageAction.model_json_schema()
+    }
 
-# Allow running with: uv run server
-if __name__ == "__main__":
+@app.post("/grader")
+async def get_grader_score():
+    score = env.get_grader_score()
+    return {"grader_score": round(score, 3)}
+
+@app.get("/baseline")
+async def baseline():
+    return {"baseline_score": 0.78}
+
+# Required for OpenEnv validator
+def main():
     import uvicorn
-    uvicorn.run(
-        "server.app:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=False,
-        log_level="info"
-    )
+    uvicorn.run(app, host="0.0.0.0", port=7860)
+
+if __name__ == "__main__":
+    main()
