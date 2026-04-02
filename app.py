@@ -1,4 +1,4 @@
-﻿import sys
+import sys
 import os
 sys.path.insert(0, os.path.abspath('.'))
 
@@ -7,41 +7,52 @@ from fastapi.middleware.cors import CORSMiddleware
 from models import EmailTriageAction
 from echo_environment import EmailTriageEnvironment
 
-app = FastAPI(title="Email Triage Environment - Scaler x Meta Hackathon")
+app = FastAPI(title="Email Triage Assistant - Scaler x Meta Hackathon")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'],
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=['*'],
-    allow_headers=['*'],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 env = EmailTriageEnvironment()
 
-@app.post('/reset')
+@app.get("/")
+async def root():
+    return {
+        "message": "✅ Email Triage Environment is LIVE!",
+        "status": "healthy",
+        "info": "POST /reset, GET /tasks, POST /grader are available"
+    }
+
+@app.post("/reset")
 async def reset():
     obs = env.reset()
     return obs.model_dump()
 
-@app.post('/step')
+@app.post("/step")
 async def step(action: EmailTriageAction):
     obs = env.step(action)
     return obs.model_dump()
 
-@app.get('/tasks')
+@app.get("/tasks")
 async def list_tasks():
     return {
-        'tasks': [1, 2, 3],
-        'description': 'Real-world Email Triage (Easy → Medium → Hard)',
-        'action_schema': EmailTriageAction.model_json_schema()
+        "tasks": [1, 2, 3],
+        "description": "Real-world Email Triage (Easy → Medium → Hard)",
+        "action_schema": EmailTriageAction.model_json_schema()
     }
 
-@app.post('/grader')
+@app.post("/grader")
 async def get_grader_score():
     score = env.get_grader_score()
-    return {'grader_score': round(score, 3)}
+    return {"grader_score": round(score, 3)}
 
-@app.get('/baseline')
+@app.get("/baseline")
 async def baseline():
-    return {'baseline_score': 0.78, 'message': 'Reproducible baseline'}
+    return {
+        "baseline_score": 0.78,
+        "message": "Reproducible baseline"
+    }
