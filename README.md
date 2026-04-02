@@ -54,4 +54,9 @@ This project simulates a **smart AI Email Assistant** that helps companies handl
 
 ---
 
-### 📂 Project Structure
+
+Made with ❤️ for the Scaler x Meta Hackathon.
+
+---
+
+**Last Updated**: April 2026
