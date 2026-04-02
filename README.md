@@ -16,7 +16,7 @@ This project simulates a **smart AI Email Assistant** that helps companies handl
 ### ✨ Key Features
 
 - **3 Progressive Tasks** with increasing difficulty (Easy → Medium → Hard)
-- **Deterministic Graders** that return scores between **0.0 - 1.0**
+- **Deterministic Graders** returning scores between **0.0 - 1.0**
 - **Meaningful Reward Shaping** with partial credit for good decisions
 - Full compliance with **Meta OpenEnv** specification
 - Clean Pydantic models for Action, Observation, and State
@@ -52,4 +52,8 @@ This project simulates a **smart AI Email Assistant** that helps companies handl
 - **Participant**: Narkees Banu (Solo Warrior)
 - **Submission Date**: April 2026
 
+---
 
+Made with ❤️ for the Scaler x Meta Hackathon.
+
+**Last Updated**: April 2026
