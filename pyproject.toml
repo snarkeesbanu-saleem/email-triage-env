@@ -1,37 +1,48 @@
 [project]
 name = "email-triage-env"
 version = "0.2.0"
-description = "Email Triage Environment for Scaler x Meta OpenEnv Hackathon"
+description = "Real-world Email Triage Environment for Scaler x Meta PyTorch OpenEnv Hackathon 2026"
 readme = "README.md"
+license = { text = "MIT" }
 requires-python = ">=3.10"
+authors = [
+    { name = "Narkees Banu" }
+]
+keywords = ["openenv", "email-triage", "rl-environment", "hackathon", "meta-pytorch", "scaler"]
+
 dependencies = [
     "openenv-core>=0.2.0",
     "fastapi>=0.115.0",
     "uvicorn[standard]>=0.30.0",
-    "pydantic>=2.0",
-    "watchfiles>=0.21.0",      # for reload in dev (optional but useful)
+    "pydantic>=2.8.0",
+    "python-multipart>=0.0.12",
 ]
 
 [project.scripts]
-# This is the critical entry point the deployment checker looks for
+# This is the most important line for the multi-mode deployment checker
 server = "server.app:create_app"
-
-[tool.uv]
-dev-dependencies = []
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["*"]
-
-[tool.uv.sources]
-# If you need any local or git dependencies later
 
 [project.optional-dependencies]
 dev = [
-    "pytest",
-    "black",
-    "isort",
+    "black>=24.8.0",
+    "isort>=5.13.0",
+    "pytest>=8.0.0",
 ]
+
+[tool.uv]
+managed = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["*", "server.*"]
 
 [project.urls]
 Homepage = "https://github.com/snarkeesbanu-saleem/email-triage-env"
+Repository = "https://github.com/snarkeesbanu-saleem/email-triage-env"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.isort]
+profile = "black"
