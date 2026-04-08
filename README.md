@@ -6,25 +6,28 @@
 
 ### 🎯 Project Overview
 
-This project simulates a **smart AI Email Assistant** that helps companies handle incoming emails automatically. The agent receives emails and must:
+This project is an **AI-powered Email Assistant** that processes incoming emails in a realistic setting. The agent must:
 
-- Classify the email correctly (Support, Sales, Complaint, etc.)
-- Set appropriate priority (High / Medium / Low)
-- Choose the right action (Reply, Archive, Escalate, Forward)
-- Generate a professional reply when needed
+- Classify emails into categories (Support, Sales, Complaint, Spam, Internal)
+- Assign correct priority (High, Medium, Low)
+- Decide the appropriate action (Reply, Archive, Escalate, Forward)
+- Generate polite and contextually accurate replies when needed
+
+It features **3 progressive tasks** with increasing difficulty, designed to test agent capabilities in real-world customer support and inbox management scenarios.
 
 ### ✨ Key Features
 
-- **3 Progressive Tasks** with increasing difficulty (Easy → Medium → Hard)
-- **Deterministic Graders** returning scores between **0.0 - 1.0**
-- **Meaningful Reward Shaping** with partial credit for good decisions
-- Full compliance with **Meta OpenEnv** specification
-- Clean Pydantic models for Action, Observation, and State
-- Deployed as a Docker container on Hugging Face Spaces
+- 3 tasks with clear difficulty progression (Easy → Medium → Hard)
+- Deterministic graders that return scores between **0.0 – 1.0**
+- Meaningful reward shaping with partial progress signals
+- Full compliance with **Meta OpenEnv** framework
+- Clean, typed Pydantic models for Action, Observation, and State
+- Containerized deployment using Docker on Hugging Face Spaces
 
 ### 🛠️ Tech Stack
 
-- **Framework**: Meta OpenEnv + FastAPI
+- **Core Framework**: Meta OpenEnv
+- **Web Framework**: FastAPI
 - **Language**: Python 3.12
 - **Deployment**: Hugging Face Docker Space
 - **Validation**: OpenEnv Validator
@@ -34,18 +37,18 @@ This project simulates a **smart AI Email Assistant** that helps companies handl
 **Hugging Face Space**:  
 [https://narkeesbanu-email-triage-env.hf.space](https://narkeesbanu-email-triage-env.hf.space)
 
-### 📋 Endpoints
+### 📋 Available Endpoints
 
-| Endpoint       | Method | Description                      |
-|----------------|--------|----------------------------------|
-| `/`            | GET    | Health check                     |
-| `/reset`       | POST   | Start new episode                |
-| `/step`        | POST   | Submit agent action              |
-| `/tasks`       | GET    | List tasks & action schema       |
-| `/grader`      | POST   | Get average grader score         |
-| `/baseline`    | GET    | Return baseline score            |
+| Method | Endpoint      | Description                          |
+|--------|---------------|--------------------------------------|
+| GET    | `/`           | Health check                         |
+| POST   | `/reset`      | Start a new episode                  |
+| POST   | `/step`       | Submit agent action                  |
+| GET    | `/tasks`      | List tasks and action schema         |
+| POST   | `/grader`     | Get average grader score             |
+| GET    | `/baseline`   | Return baseline score                |
 
-### 🏆 Hackathon Details
+### 🏆 Hackathon Information
 
 - **Event**: Scaler x Meta PyTorch OpenEnv Hackathon 2026
 - **Round**: Round 1
