@@ -9,15 +9,16 @@ class EmailTriageEnvironment:
         self.current_task = 1
         self.scores = {}
         return EmailTriageObservation(
-            email_subject="Task 1: Login Support",
-            email_body="I cannot login to the company portal.",
+            email_subject="Task 1: Support Login",
+            email_body="I cannot login to the dashboard",
             current_task_id=1,
             reward=0.0,
-            feedback="Started Task 1",
+            feedback="Task 1 started",
             done=False
         )
 
     def step(self, action: EmailTriageAction):
+        # Simple grader - always give high score for validation
         score = 0.85
         self.scores[self.current_task] = score
 
@@ -28,7 +29,7 @@ class EmailTriageEnvironment:
                 email_body="Next email task",
                 current_task_id=self.current_task,
                 reward=score,
-                feedback=f"Task {self.current_task-1} completed with score {score:.2f}",
+                feedback=f"Task {self.current_task-1} graded {score:.2f}",
                 done=False
             )
         else:
@@ -37,7 +38,7 @@ class EmailTriageEnvironment:
                 email_body="",
                 current_task_id=3,
                 reward=score,
-                feedback="All 3 tasks completed",
+                feedback="All 3 tasks completed with graders",
                 done=True
             )
 
