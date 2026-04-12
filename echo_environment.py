@@ -3,16 +3,17 @@ from models import EmailTriageAction, EmailTriageObservation, EmailTriageState, 
 class EmailTriageEnvironment:
     def __init__(self):
         self.current_task = 1
-        self.scores = {1: 0.0, 2: 0.0, 3: 0.0}
+        self.scores = {}
 
     def reset(self):
         self.current_task = 1
+        self.scores = {}
         return EmailTriageObservation(
-            email_subject="Task 1: Support Login",
-            email_body="Cannot login to dashboard",
+            email_subject="Task 1: Login Support",
+            email_body="I cannot login to the company portal.",
             current_task_id=1,
             reward=0.0,
-            feedback="Task 1",
+            feedback="Started Task 1",
             done=False
         )
 
@@ -24,10 +25,10 @@ class EmailTriageEnvironment:
             self.current_task += 1
             return EmailTriageObservation(
                 email_subject=f"Task {self.current_task}",
-                email_body="Next task",
+                email_body="Next email task",
                 current_task_id=self.current_task,
                 reward=score,
-                feedback=f"Task {self.current_task-1} graded",
+                feedback=f"Task {self.current_task-1} completed with score {score:.2f}",
                 done=False
             )
         else:
@@ -36,15 +37,17 @@ class EmailTriageEnvironment:
                 email_body="",
                 current_task_id=3,
                 reward=score,
-                feedback="All 3 tasks done",
+                feedback="All 3 tasks completed",
                 done=True
             )
 
     def state(self):
         return EmailTriageState(
             processed_tasks=self.scores,
-            total_steps=3
+            total_steps=len(self.scores)
         )
 
     def get_grader_score(self) -> float:
-        return 0.85   # Fixed high score for validation
+        if not self.scores:
+            return 0.0
+        return sum(self.scores.values()) / len(self.scores)
