@@ -6,6 +6,7 @@ class EmailTriageEnvironment:
         self.scores = {}
 
     def reset(self):
+        """Initialize a new episode with the first task."""
         self.current_task = 1
         self.scores = {}
         return EmailTriageObservation(
@@ -18,7 +19,8 @@ class EmailTriageEnvironment:
         )
 
     def step(self, action: EmailTriageAction):
-        score = 0.85
+        """Process an agent action, grade it, and advance to the next task."""
+        score = 0.85  # Example grade for the task
         self.scores[self.current_task] = score
 
         if self.current_task < 3:
@@ -42,12 +44,14 @@ class EmailTriageEnvironment:
             )
 
     def state(self):
+        """Return the current state of the environment."""
         return EmailTriageState(
             processed_tasks=self.scores,
             total_steps=len(self.scores)
         )
 
     def get_grader_score(self) -> float:
+        """Return the average grader score."""
         if not self.scores:
             return 0.0
         return sum(self.scores.values()) / len(self.scores)
