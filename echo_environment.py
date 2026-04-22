@@ -1,4 +1,4 @@
-from models import EmailTriageAction, EmailTriageObservation, EmailTriageState, EmailCategory, ActionType
+ from models import EmailTriageAction, EmailTriageObservation, EmailTriageState, EmailCategory, ActionType
 
 class EmailTriageEnvironment:
     def __init__(self):
